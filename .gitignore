@@ -25,3 +25,4 @@ hs_err_pid*
 #BlueJ associated file, INCLUDING .TXT
 *.bluej
 *.txt
+*.ctxt
