@@ -1,6 +1,3 @@
-
-
-
 /**
  * Stack implemented with LinkedList and Generics
  */
