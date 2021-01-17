@@ -1,21 +1,21 @@
+import java.util.NoSuchElementException;
+
 public class Deque<Item> implements Iterable<Item> {
 
-    private int head;
-    private int tail;
-    private Item[] d;
+    private Node<Item> head;
+    private Node<Item> tail;
     private int size;
 
     // construct an empty deque
     public Deque() {
-        d = (Item[]) new Object[1];
-        head = 0;
-        tail = 0;
         size = 0;
+        head = null;
+        tail = null;
     }
 
     // is the deque empty?
     public boolean isEmpty() {
-        return d[head] == null && d[tail] == null;
+        return size == 0;
     }
 
     // return the number of items on the deque
@@ -28,19 +28,17 @@ public class Deque<Item> implements Iterable<Item> {
         if (item == null) {
             throw new IllegalArgumentException();
         }
-        else {
-            if (d[head] == null) {
-                d[head] = item;
-            }
-            else if (head - 1 >= 0) {
-                d[--head] = item;
-            }
-            else {
-                d = expandFront(d);
-                d[head] = item;
-            }
-            size++;
+        Node<Item> newHead = new Node<>();
+        newHead.data = item;
+        if (isEmpty()) {
+            head = newHead;
+            tail = head;
+        } else {
+            newHead.next = head;
+            head.prev = newHead;
+            head = newHead;
         }
+        size++;
     }
 
     // add the item to the back
@@ -48,139 +46,105 @@ public class Deque<Item> implements Iterable<Item> {
         if (item == null) {
             throw new IllegalArgumentException();
         }
-        else {
-            if (tail + 1 >= d.length || size() >= d.length) {
-                d = extendEnd(d);
-            }
-            if (isEmpty()) {
-                d[tail] = item;
-            }
-            else {
-                d[++tail] = item;
-            }
-            size++;
+        Node<Item> newTail = new Node<>();
+        newTail.data = item;
+        if (isEmpty()) {
+            tail = newTail;
+            head = tail;
+        } else {
+            newTail.prev = tail;
+            tail.next = newTail;
+            tail = newTail;
         }
+        size++;
     }
 
     // remove and return the item from the front
     public Item removeFirst() {
         if (isEmpty()) {
-            throw new java.util.NoSuchElementException();
-        }
-        else {
-            Item data = d[head];
-            d[head] = null;
-            if (head != tail) {
-                head++;
-            }
+            throw new NoSuchElementException();
+        } else {
             size--;
-            return data;
+            Node<Item> first = head;
+            if (head.equals(tail)) {
+                head = null;
+                tail = null;
+                return first.data;
+            }
+            head = head.next;
+            first.next = null;
+            head.prev = null;
+            return first.data;
         }
-
     }
 
     // remove and return the item from the back
     public Item removeLast() {
         if (isEmpty()) {
-            throw new java.util.NoSuchElementException();
-        }
-        else {
-            Item data = d[tail];
-            d[tail] = null;
-            if (tail != head) {
-                tail--;
-            }
+            throw new NoSuchElementException();
+        } else {
             size--;
-            return data;
+            Node<Item> last = tail;
+            if (tail.equals(head)) {
+                head = null;
+                tail = null;
+                return last.data;
+            }
+            tail = tail.prev;
+            tail.next = null;
+            last.prev = null;
+            return last.data;
         }
     }
 
-    public java.util.Iterator<Item> iterator() {
-        return new Iterator<Item>();
-    }
     // return an iterator over items in order from front to back
-    // public Iterator<Item> iterator() {
-    //     return new Iterator<Item>();
-    // }
+    public java.util.Iterator<Item> iterator() {
+        return new DequeIterator<Item>();
+    }
 
-    private class Iterator<Item> implements java.util.Iterator<Item> {
-        private int current = head;
+    private class DequeIterator<Item> implements java.util.Iterator<Item> {
+        private Node<Item> current;
 
+        public DequeIterator() {
+            current = (Node<Item>) head;
+        }
+
+        @Override
         public boolean hasNext() {
-            return current <= tail;
+            return current != null;
         }
 
+        @Override
         public Item next() {
-            if (current > tail) {
-                throw new java.util.NoSuchElementException();
+            if (!hasNext()) {
+                throw new NoSuchElementException();
             }
-            else {
-                Item item = (Item) d[current];
-                current++;
-                return item;
-            }
+            Item value = current.data;
+            current = current.next;
+            return value;
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
     }
 
-    private Item[] expandFront(Item[] a) {
-        Item[] copy = (Item[]) new Object[a.length * 2 + 1];
-        System.arraycopy(a, 0, copy, copy.length / 2 + 1, a.length);
-        head = copy.length / 2;
-        tail = head + size;
-        return copy;
-    }
-
-    private Item[] extendEnd(Item[] a) {
-        Item[] copy = (Item[]) new Object[a.length * 2 + 1];
-        System.arraycopy(a, 0, copy, 0, a.length);
-        return copy;
-    }
-
-    // private String toString() {
-    //     String s = "[";
-    //     for (int i = 0; i < d.length; i++) {
-    //         s += d[i];
-    //         s += ", ";
-    //     }
-    //     s += "]";
-    //     return s;
-    // }
-
-    private String getHead() {
-        String h = "Head is " + String.valueOf(head) + ", value: " + d[head];
-        return h;
-    }
-
-    private String getTail() {
-        String t = "Tail is " + String.valueOf(tail) + ", value: " + d[tail];
-        return t;
+    private class Node<Item> {
+        Item data;
+        Node<Item> next;
+        Node<Item> prev;
     }
 
     // unit testing (required)
     public static void main(String[] args) {
-        Deque<String> test = new Deque<>();
-        test.addLast("one");
-        test.addFirst("1");
-        test.addLast("2");
-        test.addFirst("3");
-        test.addFirst("4");
-        test.addLast("5");
-        test.addLast("6");
-        // for (int i = 0; i <= 2; i++) {
-        //     test.removeFirst();
-        // }
-        // for (int i = 0; i <= 2; i++) {
-        //     test.removeLast();
-        // }
-        // System.out.println(test.getHead());
-        // System.out.println(test.getTail());
-        System.out.println(test.toString());
-        java.util.Iterator<String> it = test.iterator();
-        it.remove();
+        Deque<Integer> test = new Deque<>();
+        test.addFirst(1);
+        test.addFirst(2);
+        test.addFirst(3);
+        test.removeFirst();
+        test.removeFirst();
+        test.removeFirst();
     }
 
 }

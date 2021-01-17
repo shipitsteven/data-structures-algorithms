@@ -42,6 +42,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         Item chosen = r[randomNumber];
         r[randomNumber] = r[size - 1];
         r[--size] = null;
+        // FIXME: need to add compress null before shrinking array
         if (!isEmpty() && size < r.length / 4) resize(r.length / 2);
         return chosen;
     }
@@ -84,7 +85,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private void resize(int capacity) {
-        Item[] copy = (Item[]) new Object[r.length * 2 + 1];
+        Item[] copy = (Item[]) new Object[capacity];
         System.arraycopy(r, 0, copy, 0, r.length);
         r = copy;
     }
