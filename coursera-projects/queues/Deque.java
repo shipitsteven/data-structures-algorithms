@@ -3,12 +3,14 @@ public class Deque<Item> implements Iterable<Item> {
     private int head;
     private int tail;
     private Item[] d;
+    private int size;
 
     // construct an empty deque
     public Deque() {
         d = (Item[]) new Object[1];
         head = 0;
         tail = 0;
+        size = 0;
     }
 
     // is the deque empty?
@@ -18,15 +20,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // return the number of items on the deque
     public int size() {
-        if (isEmpty()) {
-            return 0;
-        }
-        else if (head == 0 && tail == 0) {
-            return 1;
-        }
-        else {
-            return tail - head;
-        }
+        return size;
     }
 
     // add the item to the front
@@ -45,6 +39,7 @@ public class Deque<Item> implements Iterable<Item> {
                 d = expandFront(d);
                 d[head] = item;
             }
+            size++;
         }
     }
 
@@ -63,6 +58,7 @@ public class Deque<Item> implements Iterable<Item> {
             else {
                 d[++tail] = item;
             }
+            size++;
         }
     }
 
@@ -77,6 +73,7 @@ public class Deque<Item> implements Iterable<Item> {
             if (head != tail) {
                 head++;
             }
+            size--;
             return data;
         }
 
@@ -93,6 +90,7 @@ public class Deque<Item> implements Iterable<Item> {
             if (tail != head) {
                 tail--;
             }
+            size--;
             return data;
         }
     }
@@ -106,7 +104,7 @@ public class Deque<Item> implements Iterable<Item> {
         private int current = head;
 
         public boolean hasNext() {
-            return current != tail;
+            return current <= tail;
         }
 
         public Item next() {
@@ -128,7 +126,6 @@ public class Deque<Item> implements Iterable<Item> {
     private Item[] expandFront(Item[] a) {
         Item[] copy = (Item[]) new Object[a.length * 2 + 1];
         System.arraycopy(a, 0, copy, copy.length / 2 + 1, a.length);
-        int size = size();
         head = copy.length / 2;
         tail = head + size;
         return copy;

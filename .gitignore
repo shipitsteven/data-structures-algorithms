@@ -30,3 +30,8 @@ hs_err_pid*
 # VSCode related
 *.vscode
 *.xml
+
+# Coursera project related
+*.iml
+*.idea
+*.png
