@@ -54,18 +54,18 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     // return an independent iterator over items in random order
-    public Iterator<Item> iterator() {
-        return new Iterator<Item>(r);
+    public java.util.Iterator<Item> iterator() {
+        return new RandomIterator<Item>();
     }
 
-    private class Iterator<Item> implements java.util.Iterator<Item> {
+    private class RandomIterator<Item> implements java.util.Iterator<Item> {
 
         Item[] itArray;
         int current;
 
-        public Iterator(Item[] arr) {
-            itArray = (Item[]) new Object[arr.length];
-            System.arraycopy(arr,0, itArray, 0, arr.length);
+        public RandomIterator() {
+            itArray = (Item[]) new Object[r.length];
+            System.arraycopy(r,0, itArray, 0, r.length);
             StdRandom.shuffle(itArray);
         }
 

@@ -95,10 +95,13 @@ public class Deque<Item> implements Iterable<Item> {
         }
     }
 
-    // return an iterator over items in order from front to back
-    public Iterator<Item> iterator() {
+    public java.util.Iterator<Item> iterator() {
         return new Iterator<Item>();
     }
+    // return an iterator over items in order from front to back
+    // public Iterator<Item> iterator() {
+    //     return new Iterator<Item>();
+    // }
 
     private class Iterator<Item> implements java.util.Iterator<Item> {
         private int current = head;
@@ -137,22 +140,22 @@ public class Deque<Item> implements Iterable<Item> {
         return copy;
     }
 
-    public String toString() {
-        String s = "[";
-        for (int i = 0; i < d.length; i++) {
-            s += d[i];
-            s += ", ";
-        }
-        s += "]";
-        return s;
-    }
+    // private String toString() {
+    //     String s = "[";
+    //     for (int i = 0; i < d.length; i++) {
+    //         s += d[i];
+    //         s += ", ";
+    //     }
+    //     s += "]";
+    //     return s;
+    // }
 
-    public String getHead() {
+    private String getHead() {
         String h = "Head is " + String.valueOf(head) + ", value: " + d[head];
         return h;
     }
 
-    public String getTail() {
+    private String getTail() {
         String t = "Tail is " + String.valueOf(tail) + ", value: " + d[tail];
         return t;
     }
