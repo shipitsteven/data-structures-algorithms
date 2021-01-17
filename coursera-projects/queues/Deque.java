@@ -1,3 +1,11 @@
+/* *****************************************************************************
+ *  Name: Steven Wang
+ *  Date: 1/17/2021
+ *  Description:
+ *  Double ended Queue that supports adding and remove from the front and back
+ *  Comes with an iterator for client to go through the queue from front to back
+ **************************************************************************** */
+
 import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {

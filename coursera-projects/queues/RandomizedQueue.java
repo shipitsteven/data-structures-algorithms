@@ -1,9 +1,13 @@
 /* *****************************************************************************
- *  Name:
- *  Date:
+ *  Name: Steven Wang
+ *  Date: 1/17/2021
  *  Description:
+ *  Randomized Queue that dequeue elements at random. Comes with an iterator
+ *  that returns random elements inside the queue. Each iterator's output is
+ *  mutually exclusive to each other.
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.NoSuchElementException;
@@ -38,13 +42,19 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // remove and return a random item
     public Item dequeue() {
-        int randomNumber = StdRandom.uniform(size);
-        Item chosen = r[randomNumber];
-        r[randomNumber] = r[size - 1];
-        r[--size] = null;
-        // FIXME: need to add compress null before shrinking array
-        if (!isEmpty() && size < r.length / 4) resize(r.length / 2);
-        return chosen;
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        else {
+            int randomNumber = StdRandom.uniform(size);
+            Item chosen = r[randomNumber];
+            r[randomNumber] = r[size - 1];
+            r[--size] = null;
+            if (!isEmpty() && size < r.length / 4) {
+                resize(r.length / 2);
+            }
+            return chosen;
+        }
     }
 
     // return a random item (but do not remove it)
@@ -65,8 +75,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         int current;
 
         public RandomIterator() {
-            itArray = (Item[]) new Object[r.length];
-            System.arraycopy(r,0, itArray, 0, r.length);
+            current = 0;
+            itArray = (Item[]) new Object[size];
+            System.arraycopy(r, 0, itArray, 0, size);
             StdRandom.shuffle(itArray);
         }
 
@@ -86,20 +97,25 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private void resize(int capacity) {
         Item[] copy = (Item[]) new Object[capacity];
-        System.arraycopy(r, 0, copy, 0, r.length);
+        if (capacity <= r.length / 2) {
+            System.arraycopy(r, 0, copy, 0, size);
+        }
+        else {
+            System.arraycopy(r, 0, copy, 0, r.length);
+        }
         r = copy;
     }
 
-
     // unit testing (required)
     public static void main(String[] args) {
-        RandomizedQueue<Integer> rque = new RandomizedQueue<>();
-        for (int i = 0; i < 30; i++) {
-            rque.enqueue(i);
-        }
-        for (int i = 0; i < 30; i++) {
-            System.out.print(rque.dequeue() + ", ");
+        int n = 5;
+        RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+        for (int i = 0; i < n; i++)
+            queue.enqueue(i);
+        for (int a : queue) {
+            for (int b : queue)
+                StdOut.print(a + "-" + b + " ");
+            StdOut.println();
         }
     }
-
 }
