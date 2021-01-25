@@ -71,8 +71,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private class RandomIterator<Item> implements java.util.Iterator<Item> {
 
-        Item[] itArray;
-        int current;
+        private Item[] itArray;
+        private int current;
 
         public RandomIterator() {
             current = 0;
