@@ -41,7 +41,7 @@ public class MergeSort {
      * @param left ending index of left sub-array
      * @param right ending index of right sub-array
      */
-    public static void merge(int[] a, int[] l, int[] r, int left, int right) {
+    private static void merge(int[] a, int[] l, int[] r, int left, int right) {
 
         // i tracks left sub-array
         // j tracks right sub-array
