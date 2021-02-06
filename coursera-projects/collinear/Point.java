@@ -131,11 +131,11 @@ public class Point implements Comparable<Point> {
      */
     public static void main(String[] args) {
         /* YOUR CODE HERE */
-        Point p1 = new Point(0,0);
-        Point p2 = new Point(2,2);
-        Point p3 = new Point(2,0);
-        Point p4 = new Point(0,2);
-        Point p5 = new Point(4,2);
+        Point p1 = new Point(0, 0);
+        Point p2 = new Point(2, 2);
+        Point p3 = new Point(2, 0);
+        Point p4 = new Point(0, 2);
+        Point p5 = new Point(4, 2);
 
         System.out.println("Normal slope should look like: " + p1.slopeTo(p2));
         System.out.println("Vertical line slope should look like: " + p2.slopeTo(p3));
