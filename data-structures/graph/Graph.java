@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,33 @@ public class Graph<K, E> {
         return data;
     }
 
-    private class Node<K, E> {
+    // Depth first search
+    // Does not work, I'm passing in the wrong start param, it should be a node?
+    // string rep of the node key? or something else?
+    // But the algorithm should be solid
+    public List depthFirstRecursive(Node<K, E> start) {
+        List<Node<K, E>> result = new ArrayList<>();
+        Map<Object, Boolean> visited = new HashMap<>();
+
+        return dfs(start, result, visited);
+    }
+
+    private List dfs(Node<K, E> vertex, List<Node<K, E>> result, Map<Object, Boolean> visited) {
+        if (vertex == null)
+            return null;
+        visited.put(vertex.key, true);
+        result.add(vertex);
+        for (Node<K, E> neighbor : G.get(vertex.key)) {
+            if (!visited.containsKey(neighbor.key)) {
+                return dfs(neighbor, result, visited);
+            }
+        }
+
+        return result;
+
+    }
+
+    public class Node<K, E> {
         K key = null;
         K endNode = null;
         E edgeLabel = null;
@@ -66,9 +93,10 @@ public class Graph<K, E> {
     public static void main(String[] args) {
         Graph<String, String> test = new Graph<>();
 
-        test.addEdge("Seattle", "Portland", "PNW cities");
-        test.addEdge("Seattle", "Los Angeles", "West Coast cities");
+        test.addEdge("Seattle", "Portland", "One way");
+        test.addEdge("Seattle", "Los Angeles", "One way");
+        test.addEdge("Los Angeles", "Las Vegas", "One way");
 
-        System.out.println(test.toString());
+        // System.out.println(test.depthFirstRecursive("Seattle"));
     }
 }
